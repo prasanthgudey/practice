@@ -37,7 +37,30 @@ namespace SyncVsAsync.Controllers
             });
         }
 
-        // 2️⃣ Asynchronous version - parallel API callsssssssssssssssss
+        // 2️⃣ FakeAsync version - async methods but still sequential/blocking
+        [HttpGet("fake-async")]
+        public async Task<IActionResult> GetDataFakeAsync()
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            for (int i = 1; i <= 10; i++)
+            {
+                // 🔹 Using async methods with .Result blocks the thread
+                var response = _httpClient.GetAsync("https://jsonplaceholder.typicode.com/posts/1").Result;
+                var data = response.Content.ReadAsStringAsync().Result;
+            }
+
+            stopwatch.Stop();
+
+            return Ok(new
+            {
+                Type = "Fake Async",
+                Message = "10 sequential requests using async methods (blocking)",
+                TimeTakenMs = stopwatch.ElapsedMilliseconds
+            });
+        }
+
+        // 3️⃣ Asynchronous version - parallel API calls
         [HttpGet("async")]
         public async Task<IActionResult> GetDataAsync()
         {
