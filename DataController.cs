@@ -37,7 +37,7 @@ namespace SyncVsAsync.Controllers
             });
         }
 
-        // 2️⃣ Asynchronous version - parallel API calls
+        // 2️⃣ Asynchronous version - parallel API callsssssssssssssssss
         [HttpGet("async")]
         public async Task<IActionResult> GetDataAsync()
         {
